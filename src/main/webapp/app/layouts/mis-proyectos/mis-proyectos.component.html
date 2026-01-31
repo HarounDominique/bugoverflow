@@ -1,1 +1,34 @@
-<p>mis-proyectos works!</p>
+<div class="container mt-5">
+  <h2>Mis Proyectos</h2>
+
+  @if (state.loading()) {
+    <div>Cargando...</div>
+  }
+
+  <div class="row">
+    <!-- LISTA izquierda -->
+    <div class="col-md-4">
+      @for (proyecto of state.misProyectos(); track proyecto.id) {
+        <div
+          class="card mb-2 cursor-pointer"
+          (click)="state.seleccionar(proyecto)"
+          [class.border-primary]="state.selectedProyecto()?.id === proyecto.id"
+        >
+          <div class="card-body">
+            <h6>{{ proyecto.titulo }}</h6>
+            <small>{{ proyecto.estado }}</small>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- DETALLE derecha -->
+    <div class="col-md-8">
+      @if (state.selectedProyecto(); as proyecto) {
+        <jhi-proyecto-detail [proyecto]="proyecto" />
+      } @else {
+        <div class="alert alert-info">Selecciona un proyecto</div>
+      }
+    </div>
+  </div>
+</div>

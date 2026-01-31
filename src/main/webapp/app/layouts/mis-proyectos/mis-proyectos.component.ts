@@ -1,9 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ProyectoDetailComponent } from '../../entities/proyecto/detail/proyecto-detail.component';
+import { ProyectoState } from '../../entities/proyecto/state/proyecto.state';
 
 @Component({
   selector: 'jhi-mis-proyectos',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule, ProyectoDetailComponent],
   templateUrl: './mis-proyectos.component.html',
-  styleUrl: './mis-proyectos.component.scss',
 })
-export class MisProyectosComponent {}
+export class MisProyectosComponent {
+  state = inject(ProyectoState);
+
+  ngOnInit() {
+    this.state.cargarMisProyectos();
+  }
+}

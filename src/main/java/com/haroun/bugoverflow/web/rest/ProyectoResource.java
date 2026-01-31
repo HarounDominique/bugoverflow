@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
@@ -191,5 +192,25 @@ public class ProyectoResource {
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    /**
+     * {@code GET  /proyectos/autor/:login} : get all proyectos del USUARIO logueado.
+     */
+    @GetMapping("/autor/{login}")
+    public List<Proyecto> getProyectosByAutor(@PathVariable String login) {
+        LOG.debug("REST request to get Proyectos by autor: {}", login);
+        return proyectoRepository.findByAutorLogin(login);
+    }
+
+    /**
+     * {@code GET  /proyectos/autor-current} : get all proyectos del USUARIO AUTENTICADO.
+     */
+    @GetMapping("/autor-current")
+    public List<Proyecto> getProyectosByCurrentUser() {
+        LOG.debug("REST request to get Proyectos by current user");
+        // SecurityContextHolder.getContext().getAuthentication().getName() devuelve el login
+        String currentUserLogin = SecurityContextHolder.getContext().getAuthentication().getName();
+        return proyectoRepository.findByAutorLogin(currentUserLogin);
     }
 }

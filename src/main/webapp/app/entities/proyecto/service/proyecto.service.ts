@@ -72,3 +72,4 @@ export class ProyectoService {
     return proyectoCollection;
   }
 }
+export class ProyectoStateService {}

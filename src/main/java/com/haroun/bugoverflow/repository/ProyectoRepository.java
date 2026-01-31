@@ -43,4 +43,6 @@ public interface ProyectoRepository extends ProyectoRepositoryWithBagRelationshi
 
     @Query("select proyecto from Proyecto proyecto left join fetch proyecto.autor where proyecto.id =:id")
     Optional<Proyecto> findOneWithToOneRelationships(@Param("id") Long id);
+
+    List<Proyecto> findByAutorLogin(String login);
 }
