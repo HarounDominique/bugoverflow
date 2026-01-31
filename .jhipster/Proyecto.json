@@ -1,0 +1,59 @@
+{
+  "annotations": {
+    "changelogDate": "20260131125420"
+  },
+  "fields": [
+    {
+      "fieldName": "titulo",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    },
+    {
+      "fieldName": "descripcion",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "500"
+    },
+    {
+      "fieldName": "urlrepo",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "500"
+    },
+    {
+      "fieldName": "categoria",
+      "fieldType": "tipocategoria",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "WEB,MOVIL,IAML,CIBER,VIDEOJUEGO,EMBEBIDO"
+    },
+    {
+      "fieldName": "estado",
+      "fieldType": "tipoestado",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "ABIERTO,CERRADO"
+    }
+  ],
+  "name": "Proyecto",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "login",
+      "otherEntityName": "user",
+      "relationshipName": "autor",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "login",
+      "otherEntityName": "user",
+      "otherEntityRelationshipName": "proyectos",
+      "relationshipName": "colaboradores",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "no"
+}

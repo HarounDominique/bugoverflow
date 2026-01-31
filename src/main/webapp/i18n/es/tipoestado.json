@@ -1,0 +1,9 @@
+{
+  "bugoverflowApp": {
+    "tipoestado": {
+      "null": "",
+      "ABIERTO": "ABIERTO",
+      "CERRADO": "CERRADO"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "bugoverflowApp": {
+    "tipocategoria": {
+      "null": "",
+      "WEB": "WEB",
+      "MOVIL": "MOVIL",
+      "IAML": "IAML",
+      "CIBER": "CIBER",
+      "VIDEOJUEGO": "VIDEOJUEGO",
+      "EMBEBIDO": "EMBEBIDO"
+    }
+  }
+}

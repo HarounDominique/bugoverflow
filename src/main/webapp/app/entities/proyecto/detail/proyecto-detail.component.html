@@ -1,0 +1,66 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (proyecto(); as proyectoRef) {
+      <div>
+        <h2 data-cy="proyectoDetailsHeading"><span jhiTranslate="bugoverflowApp.proyecto.detail.title">Proyecto</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ proyectoRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="bugoverflowApp.proyecto.titulo">Titulo</span></dt>
+          <dd>
+            <span>{{ proyectoRef.titulo }}</span>
+          </dd>
+          <dt><span jhiTranslate="bugoverflowApp.proyecto.descripcion">Descripcion</span></dt>
+          <dd>
+            <span>{{ proyectoRef.descripcion }}</span>
+          </dd>
+          <dt><span jhiTranslate="bugoverflowApp.proyecto.urlrepo">Urlrepo</span></dt>
+          <dd>
+            <span>{{ proyectoRef.urlrepo }}</span>
+          </dd>
+          <dt><span jhiTranslate="bugoverflowApp.proyecto.categoria">Categoria</span></dt>
+          <dd>
+            <span [jhiTranslate]="'bugoverflowApp.tipocategoria.' + (proyectoRef.categoria ?? 'null')">{{
+              { null: '', WEB: 'WEB', MOVIL: 'MOVIL', IAML: 'IAML', CIBER: 'CIBER', VIDEOJUEGO: 'VIDEOJUEGO', EMBEBIDO: 'EMBEBIDO' }[
+                proyectoRef.categoria ?? 'null'
+              ]
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="bugoverflowApp.proyecto.estado">Estado</span></dt>
+          <dd>
+            <span [jhiTranslate]="'bugoverflowApp.tipoestado.' + (proyectoRef.estado ?? 'null')">{{
+              { null: '', ABIERTO: 'ABIERTO', CERRADO: 'CERRADO' }[proyectoRef.estado ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="bugoverflowApp.proyecto.autor">Autor</span></dt>
+          <dd>
+            <span>{{ proyectoRef.autor?.login }}</span>
+          </dd>
+          <dt><span jhiTranslate="bugoverflowApp.proyecto.colaboradores">Colaboradores</span></dt>
+          <dd>
+            @for (colaboradores of proyectoRef.colaboradores; track $index; let last = $last) {
+              <span> {{ colaboradores.login }}{{ last ? '' : ', ' }} </span>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Volver</span>
+        </button>
+
+        <button type="button" [routerLink]="['/proyecto', proyectoRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editar</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

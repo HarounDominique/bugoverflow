@@ -1,0 +1,157 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-proyecto-heading" data-cy="ProyectoCreateUpdateHeading" jhiTranslate="bugoverflowApp.proyecto.home.createOrEditLabel">
+        Crear o editar Proyecto
+      </h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="bugoverflowApp.proyecto.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let tituloRef = editForm.get('titulo')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_titulo" jhiTranslate="bugoverflowApp.proyecto.titulo">Titulo</label>
+          <input type="text" class="form-control" name="titulo" id="field_titulo" data-cy="titulo" formControlName="titulo" />
+          @if (tituloRef.invalid && (tituloRef.dirty || tituloRef.touched)) {
+            <div>
+              @if (editForm.get('titulo')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Este campo es obligatorio.</small>
+              }
+              @if (editForm.get('titulo')?.errors?.maxlength) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '100' }"
+                  >Este campo no puede superar más de 100 caracteres.</small
+                >
+              }
+            </div>
+          }
+        </div>
+
+        @let descripcionRef = editForm.get('descripcion')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_descripcion" jhiTranslate="bugoverflowApp.proyecto.descripcion">Descripcion</label>
+          <input
+            type="text"
+            class="form-control"
+            name="descripcion"
+            id="field_descripcion"
+            data-cy="descripcion"
+            formControlName="descripcion"
+          />
+          @if (descripcionRef.invalid && (descripcionRef.dirty || descripcionRef.touched)) {
+            <div>
+              @if (editForm.get('descripcion')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Este campo es obligatorio.</small>
+              }
+              @if (editForm.get('descripcion')?.errors?.maxlength) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '500' }"
+                  >Este campo no puede superar más de 500 caracteres.</small
+                >
+              }
+            </div>
+          }
+        </div>
+
+        @let urlrepoRef = editForm.get('urlrepo')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_urlrepo" jhiTranslate="bugoverflowApp.proyecto.urlrepo">Urlrepo</label>
+          <input type="text" class="form-control" name="urlrepo" id="field_urlrepo" data-cy="urlrepo" formControlName="urlrepo" />
+          @if (urlrepoRef.invalid && (urlrepoRef.dirty || urlrepoRef.touched)) {
+            <div>
+              @if (editForm.get('urlrepo')?.errors?.maxlength) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '500' }"
+                  >Este campo no puede superar más de 500 caracteres.</small
+                >
+              }
+            </div>
+          }
+        </div>
+
+        @let categoriaRef = editForm.get('categoria')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_categoria" jhiTranslate="bugoverflowApp.proyecto.categoria">Categoria</label>
+          <select class="form-control" name="categoria" formControlName="categoria" id="field_categoria" data-cy="categoria">
+            <option [ngValue]="null">{{ 'bugoverflowApp.tipocategoria.null' | translate }}</option>
+            @for (tipocategoria of tipocategoriaValues; track $index) {
+              <option [value]="tipocategoria">{{ 'bugoverflowApp.tipocategoria.' + tipocategoria | translate }}</option>
+            }
+          </select>
+          @if (categoriaRef.invalid && (categoriaRef.dirty || categoriaRef.touched)) {
+            <div>
+              @if (editForm.get('categoria')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Este campo es obligatorio.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let estadoRef = editForm.get('estado')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_estado" jhiTranslate="bugoverflowApp.proyecto.estado">Estado</label>
+          <select class="form-control" name="estado" formControlName="estado" id="field_estado" data-cy="estado">
+            <option [ngValue]="null">{{ 'bugoverflowApp.tipoestado.null' | translate }}</option>
+            @for (tipoestado of tipoestadoValues; track $index) {
+              <option [value]="tipoestado">{{ 'bugoverflowApp.tipoestado.' + tipoestado | translate }}</option>
+            }
+          </select>
+          @if (estadoRef.invalid && (estadoRef.dirty || estadoRef.touched)) {
+            <div>
+              @if (editForm.get('estado')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Este campo es obligatorio.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_autor" jhiTranslate="bugoverflowApp.proyecto.autor">Autor</label>
+          <select class="form-control" id="field_autor" data-cy="autor" name="autor" formControlName="autor" [compareWith]="compareUser">
+            <option [ngValue]="null"></option>
+            @for (userOption of usersSharedCollection; track $index) {
+              <option [ngValue]="userOption">{{ userOption.login }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="field_colaboradores" jhiTranslate="bugoverflowApp.proyecto.colaboradores">Colaboradores</label>
+          <select
+            class="form-control"
+            id="field_colaboradores"
+            data-cy="colaboradores"
+            multiple
+            name="colaboradores"
+            formControlName="colaboradores"
+            [compareWith]="compareUser"
+          >
+            @for (userOption of usersSharedCollection; track $index) {
+              <option [ngValue]="userOption">{{ userOption.login }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancelar</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Guardar</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

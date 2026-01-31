@@ -1,19 +1,19 @@
 {
   "login": {
-    "title": "Iniciar la sesión",
+    "title": "Iniciar sesión",
     "form": {
       "password": "Contraseña",
-      "password.placeholder": "Su contraseña",
-      "rememberme": "Iniciar la sesión automáticamente",
+      "password.placeholder": "Tu contraseña",
+      "rememberme": "Iniciar sesión automáticamente",
       "button": "Iniciar sesión"
     },
     "messages": {
       "error": {
-        "authentication": "<strong>¡El inicio de sesión ha fallado!</strong> Por favor, revise las credenciales e intente de nuevo."
+        "authentication": "<strong>¡El inicio de sesión ha fallado!</strong> Por favor, revisa las credenciales e inténtalo de nuevo."
       }
     },
     "password": {
-      "forgot": "¿Ha olvidado su contraseña?"
+      "forgot": "¿Has olvidado tu contraseña?"
     }
   }
 }
