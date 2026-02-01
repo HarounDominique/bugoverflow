@@ -129,9 +129,10 @@ public class UserService {
         newUser.setImageUrl(userDTO.getImageUrl());
         newUser.setLangKey(userDTO.getLangKey());
         // new user is not active
-        newUser.setActivated(false);
+        newUser.setActivated(true); //todo: poner a false cuando se implemente verificacion por mail
         // new user gets registration key
-        newUser.setActivationKey(RandomUtil.generateActivationKey());
+        //newUser.setActivationKey(RandomUtil.generateActivationKey());
+        newUser.setActivationKey(null); //todo: descomentar linea anterior cuando se implemente verificaicon por mail
         Set<Authority> authorities = new HashSet<>();
         authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
         newUser.setAuthorities(authorities);
@@ -228,6 +229,14 @@ public class UserService {
         userRepository
             .findOneByLogin(login)
             .ifPresent(user -> {
+                // 1️⃣ LIMPIA authorities PRIMERO
+                user.getAuthorities().clear();
+                userRepository.saveAndFlush(user);
+
+                // 2️⃣ BORRA tokens persistentes
+                persistentTokenRepository.findByUser(user).forEach(persistentTokenRepository::delete);
+
+                // 3️⃣ BORRA usuario
                 userRepository.delete(user);
                 this.clearUserCaches(user);
                 LOG.debug("Deleted User: {}", user);
