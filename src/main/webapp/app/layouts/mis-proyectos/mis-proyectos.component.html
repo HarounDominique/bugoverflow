@@ -30,5 +30,19 @@
         <div class="alert alert-info">Selecciona un proyecto</div>
       }
     </div>
+
+    <button
+      id="jh-create-entity"
+      data-cy="entityCreateButton"
+      class="btn btn-primary jh-create-entity create-proyecto"
+      [routerLink]="['/proyecto/new']"
+    >
+      <fa-icon icon="plus"></fa-icon>
+      <span jhiTranslate="bugoverflowApp.proyecto.home.createLabel">Nuevo Proyecto</span>
+    </button>
+
+    <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+      <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Volver</span>
+    </button>
   </div>
 </div>

@@ -1,7 +1,9 @@
 package com.haroun.bugoverflow.web.rest;
 
 import com.haroun.bugoverflow.domain.Proyecto;
+import com.haroun.bugoverflow.domain.User;
 import com.haroun.bugoverflow.repository.ProyectoRepository;
+import com.haroun.bugoverflow.repository.UserRepository;
 import com.haroun.bugoverflow.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -32,12 +34,15 @@ public class ProyectoResource {
 
     private static final String ENTITY_NAME = "proyecto";
 
+    private final UserRepository userRepository;
+
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
     private final ProyectoRepository proyectoRepository;
 
-    public ProyectoResource(ProyectoRepository proyectoRepository) {
+    public ProyectoResource(UserRepository userRepository, ProyectoRepository proyectoRepository) {
+        this.userRepository = userRepository;
         this.proyectoRepository = proyectoRepository;
     }
 
@@ -54,7 +59,16 @@ public class ProyectoResource {
         if (proyecto.getId() != null) {
             throw new BadRequestAlertException("A new proyecto cannot already have an ID", ENTITY_NAME, "idexists");
         }
+
+        // ✅ OBTENER USUARIO AUTENTICADO
+        String currentUserLogin = SecurityContextHolder.getContext().getAuthentication().getName();
+        User autor = userRepository
+            .findOneByLogin(currentUserLogin)
+            .orElseThrow(() -> new BadRequestAlertException("Usuario no encontrado", ENTITY_NAME, "usernotfound"));
+
+        proyecto.setAutor(autor);
         proyecto = proyectoRepository.save(proyecto);
+
         return ResponseEntity.created(new URI("/api/proyectos/" + proyecto.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, proyecto.getId().toString()))
             .body(proyecto);
