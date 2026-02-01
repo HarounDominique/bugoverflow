@@ -108,4 +108,28 @@ export class ProyectoState {
     const userLogin = user instanceof Observable ? 'admin' : (user as any)?.login || 'admin';
     return this._proyectos().filter(p => p.autor?.login === userLogin);
   }
+
+  eliminar(proyectoId: number): void {
+    this._loading.set(true);
+    this._error.set(null);
+
+    this.http.delete(`/api/proyectos/${proyectoId}`).subscribe({
+      next: () => {
+        // Elimina del estado local
+        this._proyectos.update(pros => pros.filter(p => p.id !== proyectoId));
+
+        // Si era el proyecto seleccionado, lo deselecciona
+        if (this._selectedProyecto()?.id === proyectoId) {
+          this._selectedProyecto.set(undefined);
+        }
+
+        this._loading.set(false);
+      },
+      error: error => {
+        this._error.set('Error eliminando proyecto');
+        console.error('Delete error:', error);
+        this._loading.set(false);
+      },
+    });
+  }
 }

@@ -137,7 +137,8 @@
         </div>
       </div>
 
-      <div>
+      <!-- NUEVA SECCIÓN DE BOTONES CON ELIMINAR -->
+      <div class="d-flex justify-content-end gap-2 mt-4">
         <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
           <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancelar</span>
         </button>
@@ -149,8 +150,21 @@
           [disabled]="editForm.invalid || isSaving"
           class="btn btn-primary"
         >
-          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Guardar</span>
+          <fa-icon [icon]="isSaving ? 'spinner-third' : 'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Guardar</span>
         </button>
+
+        @if (editForm.controls.id?.value !== null) {
+          <button
+            type="button"
+            class="btn btn-danger"
+            id="delete-entity"
+            data-cy="entityDeleteButton"
+            (click)="delete()"
+            [disabled]="isSaving"
+          >
+            <fa-icon icon="trash"></fa-icon>&nbsp;<span jhiTranslate="entity.action.delete">Eliminar</span>
+          </button>
+        }
       </div>
     </form>
   </div>
