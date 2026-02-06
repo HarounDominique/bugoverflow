@@ -63,6 +63,7 @@ export class ProyectoUpdateComponent implements OnInit {
     if (proyecto.id !== null) {
       this.subscribeToSaveResponse(this.proyectoService.update(proyecto));
     } else {
+      proyecto.estado = 'ABIERTO';
       this.subscribeToSaveResponse(this.proyectoService.create(proyecto));
     }
   }

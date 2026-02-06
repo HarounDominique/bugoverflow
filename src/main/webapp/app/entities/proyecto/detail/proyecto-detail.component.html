@@ -35,12 +35,14 @@
               ]
             }}</span>
           </dd>
+
           <dt><span jhiTranslate="bugoverflowApp.proyecto.estado">Estado</span></dt>
           <dd>
             <span [jhiTranslate]="'bugoverflowApp.tipoestado.' + (proyectoRef.estado ?? 'null')">{{
               { null: '', ABIERTO: 'ABIERTO', CERRADO: 'CERRADO' }[proyectoRef.estado ?? 'null']
             }}</span>
           </dd>
+
           <dt><span jhiTranslate="bugoverflowApp.proyecto.autor">Autor</span></dt>
           <dd>
             <span>{{ proyectoRef.autor?.login }}</span>
