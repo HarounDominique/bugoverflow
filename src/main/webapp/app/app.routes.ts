@@ -4,7 +4,8 @@ import { Authority } from 'app/config/authority.constants';
 
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
 import { errorRoute } from './layouts/error/error.route';
-import { MisProyectosComponent } from './layouts/mis-proyectos/mis-proyectos.component';
+import { MisProyectosComponent } from './mis-proyectos/mis-proyectos.component';
+import { ProyectosComunidadComponent } from './proyectos-comunidad/proyectos-comunidad.component';
 
 const routes: Routes = [
   {
@@ -39,6 +40,7 @@ const routes: Routes = [
     loadChildren: () => import(`./entities/entity.routes`),
   },
   { path: 'mis-proyectos', component: MisProyectosComponent },
+  { path: 'proyectos-comunidad', component: ProyectosComunidadComponent },
   ...errorRoute,
 ];
 
