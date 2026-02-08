@@ -4,6 +4,7 @@ import com.haroun.bugoverflow.domain.Proyecto;
 import com.haroun.bugoverflow.domain.User;
 import com.haroun.bugoverflow.repository.ProyectoRepository;
 import com.haroun.bugoverflow.repository.UserRepository;
+import com.haroun.bugoverflow.security.SecurityUtils;
 import com.haroun.bugoverflow.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -177,6 +178,30 @@ public class ProyectoResource {
             return proyectoRepository.findAllWithEagerRelationships();
         } else {
             return proyectoRepository.findAll();
+        }
+    }
+
+    /**
+     * {@code GET  /proyectos} :
+     * Recupera todos los proyectos cuyo author_id no coincide con el usuario autenticado.
+     *
+     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of proyectos in body.
+     */
+    @GetMapping("/comunidad")
+    public List<Proyecto> getAllProyectosComunidad(
+        @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload
+    ) {
+        LOG.debug("REST request to get all Proyectos de la comunidad");
+
+        String login = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new IllegalStateException("Usuario no autenticado"));
+
+        Long userId = userRepository.findOneByLogin(login).orElseThrow(() -> new IllegalStateException("Usuario no encontrado")).getId();
+
+        if (eagerload) {
+            return proyectoRepository.findAllProyectosComunidadWithEagerRelationships(userId);
+        } else {
+            return proyectoRepository.findAllProyectosComunidad(userId);
         }
     }
 

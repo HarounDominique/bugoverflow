@@ -12,6 +12,7 @@ export class ProyectoState {
 
   // Estado PRIVADO (solo writable aquí)
   private readonly _proyectos = signal<IProyecto[]>([]);
+  private readonly _proyectosComunidad = signal<IProyecto[]>([]);
   private readonly _activo = signal<IProyecto | null>(null);
   private readonly _loading = signal<boolean>(false);
   private readonly _error = signal<string | null>(null);
@@ -25,6 +26,7 @@ export class ProyectoState {
   readonly error = computed(() => this._error());
   readonly selectedProyecto = computed(() => this._selectedProyecto());
   readonly misProyectos = computed(() => this._proyectos());
+  readonly proyectosComunidad = computed(() => this._proyectosComunidad());
 
   // Computed derivados (SIMPLIFICADO)
   readonly proyectosAbiertos = computed(() => this._proyectos().filter(p => p.estado === 'ABIERTO'));
@@ -62,6 +64,28 @@ export class ProyectoState {
         this._loading.set(false);
       },
     });
+  }
+
+  cargarProyectosComunidad(): void {
+    this._loading.set(true);
+    this._error.set(null);
+
+    this.http
+      .get<IProyecto[]>('/api/proyectos/comunidad', {
+        params: {
+          eagerload: 'true',
+        },
+      })
+      .subscribe({
+        next: proyectosComunidad => {
+          this._proyectosComunidad.set(proyectosComunidad);
+          this._loading.set(false);
+        },
+        error: () => {
+          this._error.set('Error cargando los proyectos de la comunidad');
+          this._loading.set(false);
+        },
+      });
   }
 
   crear(proyecto: Omit<IProyecto, 'id'>): void {
