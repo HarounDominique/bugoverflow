@@ -64,4 +64,28 @@ public interface ProyectoRepository extends ProyectoRepositoryWithBagRelationshi
         """
     )
     List<Proyecto> findAllProyectosComunidadWithEagerRelationships(@Param("userId") Long userId);
+
+    @Query(
+        """
+        select p
+        from Proyecto p
+        where p.autor.id <> :userId
+          and p.categoria = :categoria
+        """
+    )
+    List<Proyecto> findAllProyectosComunidadByCategoria(@Param("userId") Long userId, @Param("categoria") String categoria);
+
+    @Query(
+        """
+        select distinct p
+        from Proyecto p
+        left join fetch p.autor
+        where p.autor.id <> :userId
+          and p.categoria = :categoria
+        """
+    )
+    List<Proyecto> findAllProyectosComunidadByCategoriaWithEagerRelationships(
+        @Param("userId") Long userId,
+        @Param("categoria") String categoria
+    );
 }

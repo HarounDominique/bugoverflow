@@ -190,7 +190,8 @@ public class ProyectoResource {
      */
     @GetMapping("/comunidad")
     public List<Proyecto> getAllProyectosComunidad(
-        @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload
+        @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload,
+        @RequestParam(name = "categoria", required = false) String categoria
     ) {
         LOG.debug("REST request to get all Proyectos de la comunidad");
 
@@ -199,9 +200,13 @@ public class ProyectoResource {
         Long userId = userRepository.findOneByLogin(login).orElseThrow(() -> new IllegalStateException("Usuario no encontrado")).getId();
 
         if (eagerload) {
-            return proyectoRepository.findAllProyectosComunidadWithEagerRelationships(userId);
+            return categoria != null
+                ? proyectoRepository.findAllProyectosComunidadByCategoriaWithEagerRelationships(userId, categoria)
+                : proyectoRepository.findAllProyectosComunidadWithEagerRelationships(userId);
         } else {
-            return proyectoRepository.findAllProyectosComunidad(userId);
+            return categoria != null
+                ? proyectoRepository.findAllProyectosComunidadByCategoria(userId, categoria)
+                : proyectoRepository.findAllProyectosComunidad(userId);
         }
     }
 

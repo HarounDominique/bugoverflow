@@ -4,6 +4,7 @@ import { AccountService } from '../../../core/auth/account.service';
 import { IProyecto } from '../../proyecto/proyecto.model';
 import { map, filter, take, switchMap, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { tipocategoria } from '../../enumerations/tipocategoria.model';
 
 @Injectable({ providedIn: 'root' })
 export class ProyectoState {
@@ -18,6 +19,7 @@ export class ProyectoState {
   private readonly _error = signal<string | null>(null);
   private readonly _selectedProyecto = signal<IProyecto | undefined>(undefined);
   private readonly _userLogin = signal<string | null>(null);
+  private readonly _categoria = signal<keyof typeof tipocategoria | null>(null);
 
   // Estado PÚBLICO (solo readable)
   readonly proyectos = computed(() => this._proyectos());
@@ -27,6 +29,7 @@ export class ProyectoState {
   readonly selectedProyecto = computed(() => this._selectedProyecto());
   readonly misProyectos = computed(() => this._proyectos());
   readonly proyectosComunidad = computed(() => this._proyectosComunidad());
+  readonly categoria = computed(() => this._categoria());
 
   // Computed derivados (SIMPLIFICADO)
   readonly proyectosAbiertos = computed(() => this._proyectos().filter(p => p.estado === 'ABIERTO'));
@@ -70,22 +73,21 @@ export class ProyectoState {
     this._loading.set(true);
     this._error.set(null);
 
-    this.http
-      .get<IProyecto[]>('/api/proyectos/comunidad', {
-        params: {
-          eagerload: 'true',
-        },
-      })
-      .subscribe({
-        next: proyectosComunidad => {
-          this._proyectosComunidad.set(proyectosComunidad);
-          this._loading.set(false);
-        },
-        error: () => {
-          this._error.set('Error cargando los proyectos de la comunidad');
-          this._loading.set(false);
-        },
-      });
+    const params: any = {};
+    if (this._categoria()) {
+      params.categoria = this._categoria();
+    }
+
+    this.http.get<IProyecto[]>('/api/proyectos/comunidad', { params }).subscribe({
+      next: proyectos => {
+        this._proyectosComunidad.set(proyectos);
+        this._loading.set(false);
+      },
+      error: () => {
+        this._error.set('Error cargando proyectos de la comunidad');
+        this._loading.set(false);
+      },
+    });
   }
 
   crear(proyecto: Omit<IProyecto, 'id'>): void {
@@ -155,5 +157,10 @@ export class ProyectoState {
         this._loading.set(false);
       },
     });
+  }
+
+  setCategoria(categoria: keyof typeof tipocategoria | null): void {
+    this._categoria.set(categoria);
+    this.cargarProyectosComunidad();
   }
 }
