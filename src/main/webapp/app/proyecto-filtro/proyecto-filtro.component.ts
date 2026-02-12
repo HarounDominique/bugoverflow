@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { tipocategoria } from '../entities/enumerations/tipocategoria.model';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'jhi-proyecto-filtro',
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './proyecto-filtro.component.html',
   styleUrl: './proyecto-filtro.component.scss',
 })

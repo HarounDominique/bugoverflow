@@ -2,6 +2,7 @@ package com.haroun.bugoverflow.web.rest;
 
 import com.haroun.bugoverflow.domain.Proyecto;
 import com.haroun.bugoverflow.domain.User;
+import com.haroun.bugoverflow.domain.enumeration.tipocategoria;
 import com.haroun.bugoverflow.repository.ProyectoRepository;
 import com.haroun.bugoverflow.repository.UserRepository;
 import com.haroun.bugoverflow.security.SecurityUtils;
@@ -191,10 +192,8 @@ public class ProyectoResource {
     @GetMapping("/comunidad")
     public List<Proyecto> getAllProyectosComunidad(
         @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload,
-        @RequestParam(name = "categoria", required = false) String categoria
+        @RequestParam(name = "categoria", required = false) tipocategoria categoria
     ) {
-        LOG.debug("REST request to get all Proyectos de la comunidad");
-
         String login = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new IllegalStateException("Usuario no autenticado"));
 
         Long userId = userRepository.findOneByLogin(login).orElseThrow(() -> new IllegalStateException("Usuario no encontrado")).getId();

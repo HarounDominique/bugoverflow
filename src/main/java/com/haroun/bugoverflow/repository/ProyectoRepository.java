@@ -1,6 +1,7 @@
 package com.haroun.bugoverflow.repository;
 
 import com.haroun.bugoverflow.domain.Proyecto;
+import com.haroun.bugoverflow.domain.enumeration.tipocategoria;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -73,7 +74,7 @@ public interface ProyectoRepository extends ProyectoRepositoryWithBagRelationshi
           and p.categoria = :categoria
         """
     )
-    List<Proyecto> findAllProyectosComunidadByCategoria(@Param("userId") Long userId, @Param("categoria") String categoria);
+    List<Proyecto> findAllProyectosComunidadByCategoria(@Param("userId") Long userId, @Param("categoria") tipocategoria categoria);
 
     @Query(
         """
@@ -86,6 +87,6 @@ public interface ProyectoRepository extends ProyectoRepositoryWithBagRelationshi
     )
     List<Proyecto> findAllProyectosComunidadByCategoriaWithEagerRelationships(
         @Param("userId") Long userId,
-        @Param("categoria") String categoria
+        @Param("categoria") tipocategoria categoria
     );
 }
