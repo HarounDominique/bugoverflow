@@ -2,7 +2,7 @@ import { Injectable, signal, computed, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AccountService } from '../../../core/auth/account.service';
 import { IProyecto } from '../../proyecto/proyecto.model';
-import { map, filter, take, switchMap, tap } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { tipocategoria } from '../../enumerations/tipocategoria.model';
 
@@ -11,32 +11,34 @@ export class ProyectoState {
   private readonly accountService = inject(AccountService);
   private readonly http = inject(HttpClient);
 
-  // Estado PRIVADO (solo writable aquí)
+  // Estado PRIVADO
   private readonly _proyectos = signal<IProyecto[]>([]);
   private readonly _proyectosComunidad = signal<IProyecto[]>([]);
   private readonly _activo = signal<IProyecto | null>(null);
   private readonly _loading = signal<boolean>(false);
   private readonly _error = signal<string | null>(null);
-  private readonly _selectedProyecto = signal<IProyecto | undefined>(undefined);
+  private readonly _selectedMiProyecto = signal<IProyecto | undefined>(undefined);
+  private readonly _selectedProyectoComunidad = signal<IProyecto | undefined>(undefined);
   private readonly _userLogin = signal<string | null>(null);
   private readonly _categoria = signal<keyof typeof tipocategoria | null>(null);
 
-  // Estado PÚBLICO (solo readable)
+  // Estado PÚBLICO
   readonly proyectos = computed(() => this._proyectos());
   readonly activo = computed(() => this._activo());
   readonly loading = computed(() => this._loading());
   readonly error = computed(() => this._error());
-  readonly selectedProyecto = computed(() => this._selectedProyecto());
+  readonly selectedMiProyecto = computed(() => this._selectedMiProyecto());
+  readonly selectedProyectoComunidad = computed(() => this._selectedProyectoComunidad());
   readonly misProyectos = computed(() => this._proyectos());
   readonly proyectosComunidad = computed(() => this._proyectosComunidad());
   readonly categoria = computed(() => this._categoria());
 
-  // Computed derivados (SIMPLIFICADO)
+  // Computed derivados
   readonly proyectosAbiertos = computed(() => this._proyectos().filter(p => p.estado === 'ABIERTO'));
 
   constructor() {}
 
-  // MÉTODOS de CONTROL de estado
+  // MÉTODOS
   cargarTodos(): void {
     this._loading.set(true);
     this._error.set(null);
@@ -45,6 +47,8 @@ export class ProyectoState {
       next: proyectos => {
         this._proyectos.set(proyectos);
         this._loading.set(false);
+        this._selectedMiProyecto.set(undefined);
+        this._selectedProyectoComunidad.set(undefined);
       },
       error: () => {
         this._error.set('Error cargando proyectos');
@@ -56,6 +60,7 @@ export class ProyectoState {
   cargarMisProyectos(): void {
     this._loading.set(true);
     this._error.set(null);
+    this._selectedMiProyecto.set(undefined); // reset al cargar lista
 
     this.http.get<IProyecto[]>('/api/proyectos/autor-current').subscribe({
       next: proyectos => {
@@ -72,6 +77,7 @@ export class ProyectoState {
   cargarProyectosComunidad(): void {
     this._loading.set(true);
     this._error.set(null);
+    this._selectedProyectoComunidad.set(undefined); // reset al cargar lista
 
     const params: any = {};
     if (this._categoria()) {
@@ -106,10 +112,17 @@ export class ProyectoState {
 
   actualizar(proyecto: IProyecto): void {
     this._proyectos.update(pros => pros.map(p => (p.id === proyecto.id ? proyecto : p)));
+    this._proyectosComunidad.update(pros => pros.map(p => (p.id === proyecto.id ? proyecto : p)));
   }
 
-  seleccionar(proyecto: IProyecto | undefined): void {
-    this._selectedProyecto.set(proyecto);
+  seleccionar(proyecto: IProyecto | undefined, tipo: 'mi' | 'comunidad'): void {
+    if (tipo === 'mi') {
+      this._selectedMiProyecto.set(proyecto);
+      this._selectedProyectoComunidad.set(undefined);
+    } else {
+      this._selectedProyectoComunidad.set(proyecto);
+      this._selectedMiProyecto.set(undefined);
+    }
   }
 
   limpiarError(): void {
@@ -128,7 +141,6 @@ export class ProyectoState {
       });
   }
 
-  //GETTER para uso en componentes (misProyectos simplificado)
   getMisProyectos(): IProyecto[] {
     const user = this.accountService.getAuthenticationState();
     const userLogin = user instanceof Observable ? 'admin' : (user as any)?.login || 'admin';
@@ -141,12 +153,14 @@ export class ProyectoState {
 
     this.http.delete(`/api/proyectos/${proyectoId}`).subscribe({
       next: () => {
-        // Elimina del estado local
         this._proyectos.update(pros => pros.filter(p => p.id !== proyectoId));
+        this._proyectosComunidad.update(pros => pros.filter(p => p.id !== proyectoId));
 
-        // Si era el proyecto seleccionado, lo deselecciona
-        if (this._selectedProyecto()?.id === proyectoId) {
-          this._selectedProyecto.set(undefined);
+        if (this._selectedMiProyecto()?.id === proyectoId) {
+          this._selectedMiProyecto.set(undefined);
+        }
+        if (this._selectedProyectoComunidad()?.id === proyectoId) {
+          this._selectedProyectoComunidad.set(undefined);
         }
 
         this._loading.set(false);

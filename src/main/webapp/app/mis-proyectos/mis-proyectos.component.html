@@ -11,8 +11,8 @@
       @for (proyecto of state.misProyectos(); track proyecto.id) {
         <div
           class="card mb-2 cursor-pointer"
-          (click)="state.seleccionar(proyecto)"
-          [class.border-primary]="state.selectedProyecto()?.id === proyecto.id"
+          (click)="state.seleccionar(proyecto, 'mi')"
+          [class.border-primary]="state.selectedMiProyecto()?.id === proyecto.id"
         >
           <div class="card-body">
             <h6>{{ proyecto.titulo }}</h6>
@@ -24,7 +24,7 @@
 
     <!-- DETALLE derecha -->
     <div class="col-md-8">
-      @if (state.selectedProyecto(); as proyecto) {
+      @if (state.selectedMiProyecto(); as proyecto) {
         <jhi-proyecto-detail [proyecto]="proyecto" />
       } @else {
         <div class="alert alert-info">Selecciona un proyecto</div>
