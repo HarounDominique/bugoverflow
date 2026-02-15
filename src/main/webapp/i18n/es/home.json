@@ -1,19 +1,19 @@
 {
   "home": {
-    "title": "Título del home",
-    "subtitle": "Subtítulo del home",
+    "title": "¡Bienvenido, Java Hipster!",
+    "subtitle": "Esta es su página de inicio",
     "logged": {
-      "message": "Hola, \"{{username}}\"."
+      "message": "Está conectado como \"{{username}}\"."
     },
-    "question": "Si tienes preguntas sobre bugoverflow:",
+    "question": "Si tiene preguntas sobre JHipster:",
     "link": {
-      "homepage": "Página de inicio de bugoverflow",
-      "stackoverflow": "bugoverflow en Stack Overflow",
-      "bugtracker": "bugoverflow seguimiento de errores",
-      "chat": "Sala de chat pública de bugoverflow",
-      "follow": "contacto @bugoverflow en Twitter"
+      "homepage": "Página de inicio de JHipster",
+      "stackoverflow": "JHipster en Stack Overflow",
+      "bugtracker": "JHipster seguimiento de errores",
+      "chat": "Sala de chat pública de JHipster",
+      "follow": "contacto @jhipster en Twitter"
     },
-    "like": "Si te gusta bugoverflow, danos una estrella en",
+    "like": "Si te gusta JHipster, danos una estrella en",
     "github": "GitHub"
   }
 }

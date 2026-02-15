@@ -54,6 +54,7 @@ public class CacheConfiguration {
             createCache(cm, com.haroun.bugoverflow.domain.User.class.getName() + ".persistentTokens");
             createCache(cm, com.haroun.bugoverflow.domain.Proyecto.class.getName());
             createCache(cm, com.haroun.bugoverflow.domain.Proyecto.class.getName() + ".colaboradores");
+            createCache(cm, com.haroun.bugoverflow.domain.PerfilUsuario.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

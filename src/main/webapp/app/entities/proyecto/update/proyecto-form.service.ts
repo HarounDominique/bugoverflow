@@ -57,7 +57,7 @@ export class ProyectoFormService {
         validators: [Validators.required],
       }),
       estado: new FormControl(proyectoRawValue.estado, {
-        validators: [],
+        validators: [Validators.required],
       }),
       autor: new FormControl(proyectoRawValue.autor),
       colaboradores: new FormControl(proyectoRawValue.colaboradores ?? []),

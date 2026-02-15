@@ -14,7 +14,6 @@ import { tipoestado } from 'app/entities/enumerations/tipoestado.model';
 import { ProyectoService } from '../service/proyecto.service';
 import { IProyecto } from '../proyecto.model';
 import { ProyectoFormGroup, ProyectoFormService } from './proyecto-form.service';
-import { ProyectoState } from '../state/proyecto.state';
 
 @Component({
   selector: 'jhi-proyecto-update',
@@ -22,9 +21,6 @@ import { ProyectoState } from '../state/proyecto.state';
   imports: [SharedModule, FormsModule, ReactiveFormsModule],
 })
 export class ProyectoUpdateComponent implements OnInit {
-  //injects:
-  protected proyectoState = inject(ProyectoState);
-
   isSaving = false;
   proyecto: IProyecto | null = null;
   tipocategoriaValues = Object.keys(tipocategoria);
@@ -63,7 +59,6 @@ export class ProyectoUpdateComponent implements OnInit {
     if (proyecto.id !== null) {
       this.subscribeToSaveResponse(this.proyectoService.update(proyecto));
     } else {
-      proyecto.estado = 'ABIERTO';
       this.subscribeToSaveResponse(this.proyectoService.create(proyecto));
     }
   }
@@ -108,25 +103,5 @@ export class ProyectoUpdateComponent implements OnInit {
         ),
       )
       .subscribe((users: IUser[]) => (this.usersSharedCollection = users));
-  }
-
-  protected delete(): void {
-    if (!this.proyecto?.id) {
-      return;
-    }
-
-    // Confirmación antes de eliminar (estándar JHipster)
-    if (confirm('¿Estás seguro de que quieres eliminar este proyecto?')) {
-      this.isSaving = true;
-
-      // Llama al state para eliminar
-      this.proyectoState.eliminar(this.proyecto.id);
-
-      // Regresa a la lista después de eliminar
-      setTimeout(() => {
-        this.isSaving = false;
-        this.previousState();
-      }, 1000);
-    }
   }
 }

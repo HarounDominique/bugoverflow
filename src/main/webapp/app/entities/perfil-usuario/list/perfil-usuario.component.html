@@ -1,0 +1,125 @@
+<div>
+  <h2 id="page-heading" data-cy="PerfilUsuarioHeading">
+    <span jhiTranslate="bugoverflowApp.perfilUsuario.home.title">Perfil Usuarios</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span jhiTranslate="bugoverflowApp.perfilUsuario.home.refreshListLabel">Refrescar lista</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-perfil-usuario"
+        [routerLink]="['/perfil-usuario/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="bugoverflowApp.perfilUsuario.home.createLabel">Crear nuevo Perfil Usuario</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error />
+
+  <jhi-alert />
+
+  @if (perfilUsuarios().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="bugoverflowApp.perfilUsuario.home.notFound">Ningún Perfil Usuarios encontrado</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="nombreVisible">
+              <div class="d-flex">
+                <span jhiTranslate="bugoverflowApp.perfilUsuario.nombreVisible">Nombre Visible</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="bio">
+              <div class="d-flex">
+                <span jhiTranslate="bugoverflowApp.perfilUsuario.bio">Bio</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="github">
+              <div class="d-flex">
+                <span jhiTranslate="bugoverflowApp.perfilUsuario.github">Github</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="webPersonal">
+              <div class="d-flex">
+                <span jhiTranslate="bugoverflowApp.perfilUsuario.webPersonal">Web Personal</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="avatarUrl">
+              <div class="d-flex">
+                <span jhiTranslate="bugoverflowApp.perfilUsuario.avatarUrl">Avatar Url</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="user.login">
+              <div class="d-flex">
+                <span jhiTranslate="bugoverflowApp.perfilUsuario.user">User</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (perfilUsuario of perfilUsuarios(); track trackId(perfilUsuario)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/perfil-usuario', perfilUsuario.id, 'view']">{{ perfilUsuario.id }}</a>
+              </td>
+              <td>{{ perfilUsuario.nombreVisible }}</td>
+              <td>{{ perfilUsuario.bio }}</td>
+              <td>{{ perfilUsuario.github }}</td>
+              <td>{{ perfilUsuario.webPersonal }}</td>
+              <td>{{ perfilUsuario.avatarUrl }}</td>
+              <td>
+                {{ perfilUsuario.user?.login }}
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/perfil-usuario', perfilUsuario.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Vista</span>
+                  </a>
+
+                  <a [routerLink]="['/perfil-usuario', perfilUsuario.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Editar</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(perfilUsuario)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Eliminar</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

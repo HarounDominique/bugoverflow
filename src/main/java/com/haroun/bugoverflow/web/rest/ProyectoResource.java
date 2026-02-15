@@ -1,11 +1,7 @@
 package com.haroun.bugoverflow.web.rest;
 
 import com.haroun.bugoverflow.domain.Proyecto;
-import com.haroun.bugoverflow.domain.User;
-import com.haroun.bugoverflow.domain.enumeration.tipocategoria;
 import com.haroun.bugoverflow.repository.ProyectoRepository;
-import com.haroun.bugoverflow.repository.UserRepository;
-import com.haroun.bugoverflow.security.SecurityUtils;
 import com.haroun.bugoverflow.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -18,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
@@ -36,15 +31,12 @@ public class ProyectoResource {
 
     private static final String ENTITY_NAME = "proyecto";
 
-    private final UserRepository userRepository;
-
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
     private final ProyectoRepository proyectoRepository;
 
-    public ProyectoResource(UserRepository userRepository, ProyectoRepository proyectoRepository) {
-        this.userRepository = userRepository;
+    public ProyectoResource(ProyectoRepository proyectoRepository) {
         this.proyectoRepository = proyectoRepository;
     }
 
@@ -61,16 +53,7 @@ public class ProyectoResource {
         if (proyecto.getId() != null) {
             throw new BadRequestAlertException("A new proyecto cannot already have an ID", ENTITY_NAME, "idexists");
         }
-
-        // ✅ OBTENER USUARIO AUTENTICADO
-        String currentUserLogin = SecurityContextHolder.getContext().getAuthentication().getName();
-        User autor = userRepository
-            .findOneByLogin(currentUserLogin)
-            .orElseThrow(() -> new BadRequestAlertException("Usuario no encontrado", ENTITY_NAME, "usernotfound"));
-
-        proyecto.setAutor(autor);
         proyecto = proyectoRepository.save(proyecto);
-
         return ResponseEntity.created(new URI("/api/proyectos/" + proyecto.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, proyecto.getId().toString()))
             .body(proyecto);
@@ -183,33 +166,6 @@ public class ProyectoResource {
     }
 
     /**
-     * {@code GET  /proyectos} :
-     * Recupera todos los proyectos cuyo author_id no coincide con el usuario autenticado.
-     *
-     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of proyectos in body.
-     */
-    @GetMapping("/comunidad")
-    public List<Proyecto> getAllProyectosComunidad(
-        @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload,
-        @RequestParam(name = "categoria", required = false) tipocategoria categoria
-    ) {
-        String login = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new IllegalStateException("Usuario no autenticado"));
-
-        Long userId = userRepository.findOneByLogin(login).orElseThrow(() -> new IllegalStateException("Usuario no encontrado")).getId();
-
-        if (eagerload) {
-            return categoria != null
-                ? proyectoRepository.findAllProyectosComunidadByCategoriaWithEagerRelationships(userId, categoria)
-                : proyectoRepository.findAllProyectosComunidadWithEagerRelationships(userId);
-        } else {
-            return categoria != null
-                ? proyectoRepository.findAllProyectosComunidadByCategoria(userId, categoria)
-                : proyectoRepository.findAllProyectosComunidad(userId);
-        }
-    }
-
-    /**
      * {@code GET  /proyectos/:id} : get the "id" proyecto.
      *
      * @param id the id of the proyecto to retrieve.
@@ -235,25 +191,5 @@ public class ProyectoResource {
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
-    }
-
-    /**
-     * {@code GET  /proyectos/autor/:login} : get all proyectos del USUARIO logueado.
-     */
-    @GetMapping("/autor/{login}")
-    public List<Proyecto> getProyectosByAutor(@PathVariable String login) {
-        LOG.debug("REST request to get Proyectos by autor: {}", login);
-        return proyectoRepository.findByAutorLogin(login);
-    }
-
-    /**
-     * {@code GET  /proyectos/autor-current} : get all proyectos del USUARIO AUTENTICADO.
-     */
-    @GetMapping("/autor-current")
-    public List<Proyecto> getProyectosByCurrentUser() {
-        LOG.debug("REST request to get Proyectos by current user");
-        // SecurityContextHolder.getContext().getAuthentication().getName() devuelve el login
-        String currentUserLogin = SecurityContextHolder.getContext().getAuthentication().getName();
-        return proyectoRepository.findByAutorLogin(currentUserLogin);
     }
 }

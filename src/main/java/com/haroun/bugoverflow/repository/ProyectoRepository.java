@@ -1,7 +1,6 @@
 package com.haroun.bugoverflow.repository;
 
 import com.haroun.bugoverflow.domain.Proyecto;
-import com.haroun.bugoverflow.domain.enumeration.tipocategoria;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -44,49 +43,4 @@ public interface ProyectoRepository extends ProyectoRepositoryWithBagRelationshi
 
     @Query("select proyecto from Proyecto proyecto left join fetch proyecto.autor where proyecto.id =:id")
     Optional<Proyecto> findOneWithToOneRelationships(@Param("id") Long id);
-
-    List<Proyecto> findByAutorLogin(String login);
-
-    @Query(
-        """
-        select p
-        from Proyecto p
-        where p.autor.id <> :userId
-        """
-    )
-    List<Proyecto> findAllProyectosComunidad(@Param("userId") Long userId);
-
-    @Query(
-        """
-        select distinct p
-        from Proyecto p
-        left join fetch p.autor
-        where p.autor.id <> :userId
-        """
-    )
-    List<Proyecto> findAllProyectosComunidadWithEagerRelationships(@Param("userId") Long userId);
-
-    @Query(
-        """
-        select p
-        from Proyecto p
-        where p.autor.id <> :userId
-          and p.categoria = :categoria
-        """
-    )
-    List<Proyecto> findAllProyectosComunidadByCategoria(@Param("userId") Long userId, @Param("categoria") tipocategoria categoria);
-
-    @Query(
-        """
-        select distinct p
-        from Proyecto p
-        left join fetch p.autor
-        where p.autor.id <> :userId
-          and p.categoria = :categoria
-        """
-    )
-    List<Proyecto> findAllProyectosComunidadByCategoriaWithEagerRelationships(
-        @Param("userId") Long userId,
-        @Param("categoria") tipocategoria categoria
-    );
 }
