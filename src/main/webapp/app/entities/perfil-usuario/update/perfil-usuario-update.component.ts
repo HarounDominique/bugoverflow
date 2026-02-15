@@ -9,8 +9,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IUser } from 'app/entities/user/user.model';
 import { UserService } from 'app/entities/user/service/user.service';
-import { IPerfilUsuario } from '../perfil-usuario.model';
+import { ISkill } from 'app/entities/skill/skill.model';
+import { SkillService } from 'app/entities/skill/service/skill.service';
 import { PerfilUsuarioService } from '../service/perfil-usuario.service';
+import { IPerfilUsuario } from '../perfil-usuario.model';
 import { PerfilUsuarioFormGroup, PerfilUsuarioFormService } from './perfil-usuario-form.service';
 
 @Component({
@@ -23,16 +25,20 @@ export class PerfilUsuarioUpdateComponent implements OnInit {
   perfilUsuario: IPerfilUsuario | null = null;
 
   usersSharedCollection: IUser[] = [];
+  skillsSharedCollection: ISkill[] = [];
 
   protected perfilUsuarioService = inject(PerfilUsuarioService);
   protected perfilUsuarioFormService = inject(PerfilUsuarioFormService);
   protected userService = inject(UserService);
+  protected skillService = inject(SkillService);
   protected activatedRoute = inject(ActivatedRoute);
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
   editForm: PerfilUsuarioFormGroup = this.perfilUsuarioFormService.createPerfilUsuarioFormGroup();
 
   compareUser = (o1: IUser | null, o2: IUser | null): boolean => this.userService.compareUser(o1, o2);
+
+  compareSkill = (o1: ISkill | null, o2: ISkill | null): boolean => this.skillService.compareSkill(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ perfilUsuario }) => {
@@ -83,6 +89,10 @@ export class PerfilUsuarioUpdateComponent implements OnInit {
     this.perfilUsuarioFormService.resetForm(this.editForm, perfilUsuario);
 
     this.usersSharedCollection = this.userService.addUserToCollectionIfMissing<IUser>(this.usersSharedCollection, perfilUsuario.user);
+    this.skillsSharedCollection = this.skillService.addSkillToCollectionIfMissing<ISkill>(
+      this.skillsSharedCollection,
+      ...(perfilUsuario.skills ?? []),
+    );
   }
 
   protected loadRelationshipsOptions(): void {
@@ -91,5 +101,13 @@ export class PerfilUsuarioUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IUser[]>) => res.body ?? []))
       .pipe(map((users: IUser[]) => this.userService.addUserToCollectionIfMissing<IUser>(users, this.perfilUsuario?.user)))
       .subscribe((users: IUser[]) => (this.usersSharedCollection = users));
+
+    this.skillService
+      .query()
+      .pipe(map((res: HttpResponse<ISkill[]>) => res.body ?? []))
+      .pipe(
+        map((skills: ISkill[]) => this.skillService.addSkillToCollectionIfMissing<ISkill>(skills, ...(this.perfilUsuario?.skills ?? []))),
+      )
+      .subscribe((skills: ISkill[]) => (this.skillsSharedCollection = skills));
   }
 }

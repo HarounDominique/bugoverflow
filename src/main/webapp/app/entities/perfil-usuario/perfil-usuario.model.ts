@@ -1,4 +1,5 @@
 import { IUser } from 'app/entities/user/user.model';
+import { ISkill } from 'app/entities/skill/skill.model';
 
 export interface IPerfilUsuario {
   id: number;
@@ -8,6 +9,7 @@ export interface IPerfilUsuario {
   webPersonal?: string | null;
   avatarUrl?: string | null;
   user?: Pick<IUser, 'id' | 'login'> | null;
+  skills?: ISkill[] | null;
 }
 
 export type NewPerfilUsuario = Omit<IPerfilUsuario, 'id'> & { id: null };

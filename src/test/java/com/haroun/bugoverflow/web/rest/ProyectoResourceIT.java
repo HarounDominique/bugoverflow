@@ -395,7 +395,7 @@ class ProyectoResourceIT {
         Proyecto partialUpdatedProyecto = new Proyecto();
         partialUpdatedProyecto.setId(proyecto.getId());
 
-        partialUpdatedProyecto.descripcion(UPDATED_DESCRIPCION).categoria(UPDATED_CATEGORIA);
+        partialUpdatedProyecto.titulo(UPDATED_TITULO).urlrepo(UPDATED_URLREPO).categoria(UPDATED_CATEGORIA).estado(UPDATED_ESTADO);
 
         restProyectoMockMvc
             .perform(

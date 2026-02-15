@@ -16,6 +16,11 @@ const routes: Routes = [
     data: { pageTitle: 'bugoverflowApp.perfilUsuario.home.title' },
     loadChildren: () => import('./perfil-usuario/perfil-usuario.routes'),
   },
+  {
+    path: 'skill',
+    data: { pageTitle: 'bugoverflowApp.skill.home.title' },
+    loadChildren: () => import('./skill/skill.routes'),
+  },
   /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
 ];
 

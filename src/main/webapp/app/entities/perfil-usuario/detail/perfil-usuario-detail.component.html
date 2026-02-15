@@ -39,6 +39,15 @@
           <dd>
             <span>{{ perfilUsuarioRef.user?.login }}</span>
           </dd>
+          <dt><span jhiTranslate="bugoverflowApp.perfilUsuario.skill">Skill</span></dt>
+          <dd>
+            @for (skill of perfilUsuarioRef.skills; track $index; let last = $last) {
+              <span>
+                <a [routerLink]="['/skill', skill.id, 'view']">{{ skill?.id }}</a
+                >{{ last ? '' : ', ' }}
+              </span>
+            }
+          </dd>
         </dl>
 
         <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

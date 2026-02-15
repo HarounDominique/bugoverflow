@@ -1,8 +1,11 @@
 package com.haroun.bugoverflow.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -47,6 +50,11 @@ public class PerfilUsuario implements Serializable {
     @MapsId
     @JoinColumn(name = "id")
     private User user;
+
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "perfilUsuarios")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "perfilUsuarios" }, allowSetters = true)
+    private Set<Skill> skills = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -138,6 +146,37 @@ public class PerfilUsuario implements Serializable {
 
     public PerfilUsuario user(User user) {
         this.setUser(user);
+        return this;
+    }
+
+    public Set<Skill> getSkills() {
+        return this.skills;
+    }
+
+    public void setSkills(Set<Skill> skills) {
+        if (this.skills != null) {
+            this.skills.forEach(i -> i.removePerfilUsuario(this));
+        }
+        if (skills != null) {
+            skills.forEach(i -> i.addPerfilUsuario(this));
+        }
+        this.skills = skills;
+    }
+
+    public PerfilUsuario skills(Set<Skill> skills) {
+        this.setSkills(skills);
+        return this;
+    }
+
+    public PerfilUsuario addSkill(Skill skill) {
+        this.skills.add(skill);
+        skill.getPerfilUsuarios().add(this);
+        return this;
+    }
+
+    public PerfilUsuario removeSkill(Skill skill) {
+        this.skills.remove(skill);
+        skill.getPerfilUsuarios().remove(this);
         return this;
     }
 

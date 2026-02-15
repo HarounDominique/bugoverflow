@@ -14,7 +14,7 @@ type PartialWithRequiredKeyOf<T extends { id: unknown }> = Partial<Omit<T, 'id'>
  */
 type PerfilUsuarioFormGroupInput = IPerfilUsuario | PartialWithRequiredKeyOf<NewPerfilUsuario>;
 
-type PerfilUsuarioFormDefaults = Pick<NewPerfilUsuario, 'id'>;
+type PerfilUsuarioFormDefaults = Pick<NewPerfilUsuario, 'id' | 'skills'>;
 
 type PerfilUsuarioFormGroupContent = {
   id: FormControl<IPerfilUsuario['id'] | NewPerfilUsuario['id']>;
@@ -24,6 +24,7 @@ type PerfilUsuarioFormGroupContent = {
   webPersonal: FormControl<IPerfilUsuario['webPersonal']>;
   avatarUrl: FormControl<IPerfilUsuario['avatarUrl']>;
   user: FormControl<IPerfilUsuario['user']>;
+  skills: FormControl<IPerfilUsuario['skills']>;
 };
 
 export type PerfilUsuarioFormGroup = FormGroup<PerfilUsuarioFormGroupContent>;
@@ -61,6 +62,7 @@ export class PerfilUsuarioFormService {
       user: new FormControl(perfilUsuarioRawValue.user, {
         validators: [Validators.required],
       }),
+      skills: new FormControl(perfilUsuarioRawValue.skills ?? []),
     });
   }
 
@@ -81,6 +83,7 @@ export class PerfilUsuarioFormService {
   private getFormDefaults(): PerfilUsuarioFormDefaults {
     return {
       id: null,
+      skills: [],
     };
   }
 }

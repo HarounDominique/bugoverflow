@@ -26,6 +26,7 @@ describe('PerfilUsuario Form Service', () => {
             webPersonal: expect.any(Object),
             avatarUrl: expect.any(Object),
             user: expect.any(Object),
+            skills: expect.any(Object),
           }),
         );
       });
@@ -42,6 +43,7 @@ describe('PerfilUsuario Form Service', () => {
             webPersonal: expect.any(Object),
             avatarUrl: expect.any(Object),
             user: expect.any(Object),
+            skills: expect.any(Object),
           }),
         );
       });

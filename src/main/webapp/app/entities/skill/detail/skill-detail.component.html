@@ -1,0 +1,47 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (skill(); as skillRef) {
+      <div>
+        <h2 data-cy="skillDetailsHeading"><span jhiTranslate="bugoverflowApp.skill.detail.title">Skill</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ skillRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="bugoverflowApp.skill.nombre">Nombre</span></dt>
+          <dd>
+            <span>{{ skillRef.nombre }}</span>
+          </dd>
+          <dt><span jhiTranslate="bugoverflowApp.skill.descripcion">Descripcion</span></dt>
+          <dd>
+            <span>{{ skillRef.descripcion }}</span>
+          </dd>
+          <dt><span jhiTranslate="bugoverflowApp.skill.perfilUsuario">Perfil Usuario</span></dt>
+          <dd>
+            @for (perfilUsuario of skillRef.perfilUsuarios; track $index; let last = $last) {
+              <span>
+                <a [routerLink]="['/perfil-usuario', perfilUsuario.id, 'view']">{{ perfilUsuario?.id }}</a
+                >{{ last ? '' : ', ' }}
+              </span>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Volver</span>
+        </button>
+
+        <button type="button" [routerLink]="['/skill', skillRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editar</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

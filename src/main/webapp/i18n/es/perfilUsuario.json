@@ -23,7 +23,8 @@
       "github": "Github",
       "webPersonal": "Web Personal",
       "avatarUrl": "Avatar Url",
-      "user": "User"
+      "user": "User",
+      "skill": "Skill"
     }
   }
 }

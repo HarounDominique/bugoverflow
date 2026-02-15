@@ -406,7 +406,7 @@ class PerfilUsuarioResourceIT {
         PerfilUsuario partialUpdatedPerfilUsuario = new PerfilUsuario();
         partialUpdatedPerfilUsuario.setId(perfilUsuario.getId());
 
-        partialUpdatedPerfilUsuario.nombreVisible(UPDATED_NOMBRE_VISIBLE).bio(UPDATED_BIO).avatarUrl(UPDATED_AVATAR_URL);
+        partialUpdatedPerfilUsuario.github(UPDATED_GITHUB).avatarUrl(UPDATED_AVATAR_URL);
 
         restPerfilUsuarioMockMvc
             .perform(

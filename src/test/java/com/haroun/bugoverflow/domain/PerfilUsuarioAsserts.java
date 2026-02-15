@@ -72,6 +72,8 @@ public class PerfilUsuarioAsserts {
      * @param actual the actual entity
      */
     public static void assertPerfilUsuarioUpdatableRelationshipsEquals(PerfilUsuario expected, PerfilUsuario actual) {
-        // empty method
+        assertThat(actual)
+            .as("Verify PerfilUsuario relationships")
+            .satisfies(a -> assertThat(a.getSkills()).as("check skills").isEqualTo(expected.getSkills()));
     }
 }

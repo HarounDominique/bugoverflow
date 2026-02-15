@@ -136,6 +136,23 @@
             }
           </div>
         }
+
+        <div class="mb-3">
+          <label for="field_skills" jhiTranslate="bugoverflowApp.perfilUsuario.skill">Skill</label>
+          <select
+            class="form-control"
+            id="field_skills"
+            data-cy="skill"
+            multiple
+            name="skills"
+            formControlName="skills"
+            [compareWith]="compareSkill"
+          >
+            @for (skillOption of skillsSharedCollection; track $index) {
+              <option [ngValue]="skillOption">{{ skillOption.id }}</option>
+            }
+          </select>
+        </div>
       </div>
 
       <div>

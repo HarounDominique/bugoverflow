@@ -6,8 +6,10 @@ import { Subject, from, of } from 'rxjs';
 
 import { IUser } from 'app/entities/user/user.model';
 import { UserService } from 'app/entities/user/service/user.service';
-import { PerfilUsuarioService } from '../service/perfil-usuario.service';
+import { ISkill } from 'app/entities/skill/skill.model';
+import { SkillService } from 'app/entities/skill/service/skill.service';
 import { IPerfilUsuario } from '../perfil-usuario.model';
+import { PerfilUsuarioService } from '../service/perfil-usuario.service';
 import { PerfilUsuarioFormService } from './perfil-usuario-form.service';
 
 import { PerfilUsuarioUpdateComponent } from './perfil-usuario-update.component';
@@ -19,6 +21,7 @@ describe('PerfilUsuario Management Update Component', () => {
   let perfilUsuarioFormService: PerfilUsuarioFormService;
   let perfilUsuarioService: PerfilUsuarioService;
   let userService: UserService;
+  let skillService: SkillService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -42,6 +45,7 @@ describe('PerfilUsuario Management Update Component', () => {
     perfilUsuarioFormService = TestBed.inject(PerfilUsuarioFormService);
     perfilUsuarioService = TestBed.inject(PerfilUsuarioService);
     userService = TestBed.inject(UserService);
+    skillService = TestBed.inject(SkillService);
 
     comp = fixture.componentInstance;
   });
@@ -69,15 +73,40 @@ describe('PerfilUsuario Management Update Component', () => {
       expect(comp.usersSharedCollection).toEqual(expectedCollection);
     });
 
+    it('should call Skill query and add missing value', () => {
+      const perfilUsuario: IPerfilUsuario = { id: 13667 };
+      const skills: ISkill[] = [{ id: 24455 }];
+      perfilUsuario.skills = skills;
+
+      const skillCollection: ISkill[] = [{ id: 24455 }];
+      jest.spyOn(skillService, 'query').mockReturnValue(of(new HttpResponse({ body: skillCollection })));
+      const additionalSkills = [...skills];
+      const expectedCollection: ISkill[] = [...additionalSkills, ...skillCollection];
+      jest.spyOn(skillService, 'addSkillToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ perfilUsuario });
+      comp.ngOnInit();
+
+      expect(skillService.query).toHaveBeenCalled();
+      expect(skillService.addSkillToCollectionIfMissing).toHaveBeenCalledWith(
+        skillCollection,
+        ...additionalSkills.map(expect.objectContaining),
+      );
+      expect(comp.skillsSharedCollection).toEqual(expectedCollection);
+    });
+
     it('should update editForm', () => {
       const perfilUsuario: IPerfilUsuario = { id: 13667 };
       const user: IUser = { id: 3944 };
       perfilUsuario.user = user;
+      const skill: ISkill = { id: 24455 };
+      perfilUsuario.skills = [skill];
 
       activatedRoute.data = of({ perfilUsuario });
       comp.ngOnInit();
 
       expect(comp.usersSharedCollection).toContainEqual(user);
+      expect(comp.skillsSharedCollection).toContainEqual(skill);
       expect(comp.perfilUsuario).toEqual(perfilUsuario);
     });
   });
@@ -158,6 +187,16 @@ describe('PerfilUsuario Management Update Component', () => {
         jest.spyOn(userService, 'compareUser');
         comp.compareUser(entity, entity2);
         expect(userService.compareUser).toHaveBeenCalledWith(entity, entity2);
+      });
+    });
+
+    describe('compareSkill', () => {
+      it('should forward to skillService', () => {
+        const entity = { id: 24455 };
+        const entity2 = { id: 21768 };
+        jest.spyOn(skillService, 'compareSkill');
+        comp.compareSkill(entity, entity2);
+        expect(skillService.compareSkill).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });
