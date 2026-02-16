@@ -1,0 +1,11 @@
+<div class="d-flex flex-wrap mb-4">
+    <h1 class="flex-grow-1" i18n="@@skill.add.headline">Add Skill</h1>
+    <div>
+        <a routerLink="/skills" class="btn btn-secondary" i18n="@@skill.add.back">Back to list</a>
+    </div>
+</div>
+<form [formGroup]="addForm" (ngSubmit)="handleSubmit()">
+    <app-input-row [group]="addForm" field="nombre" i18n-label="@@skill.nombre.label" label="Nombre" />
+    <app-input-row [group]="addForm" field="categoria" rowType="select" [options]="{'FRONTEND': 'FRONTEND', 'BACKEND': 'BACKEND', 'DATABASE': 'DATABASE', 'DEVOPS': 'DEVOPS', 'MOBILE': 'MOBILE'}" i18n-label="@@skill.categoria.label" label="Categoria" />
+    <input type="submit" i18n-value="@@skill.add.headline" value="Add Skill" class="btn btn-primary mt-4" />
+</form>

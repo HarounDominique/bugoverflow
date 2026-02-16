@@ -1,0 +1,13 @@
+<div class="d-flex flex-wrap mb-4">
+    <h1 class="flex-grow-1" i18n="@@candidatura.add.headline">Add Candidatura</h1>
+    <div>
+        <a routerLink="/candidaturas" class="btn btn-secondary" i18n="@@candidatura.add.back">Back to list</a>
+    </div>
+</div>
+<form [formGroup]="addForm" (ngSubmit)="handleSubmit()">
+    <app-input-row [group]="addForm" field="fecha" rowType="datetimepicker" i18n-label="@@candidatura.fecha.label" label="Fecha" />
+    <app-input-row [group]="addForm" field="estado" rowType="radio" [options]="{'PENDIENTE': 'PENDIENTE', 'ACEPTADA': 'ACEPTADA', 'RECHAZADA': 'RECHAZADA'}" i18n-label="@@candidatura.estado.label" label="Estado" />
+    <app-input-row [group]="addForm" field="usuario" rowType="select" [options]="usuarioValues" i18n-label="@@candidatura.usuario.label" label="Usuario" />
+    <app-input-row [group]="addForm" field="proyecto" rowType="select" [options]="proyectoValues" i18n-label="@@candidatura.proyecto.label" label="Proyecto" />
+    <input type="submit" i18n-value="@@candidatura.add.headline" value="Add Candidatura" class="btn btn-primary mt-4" />
+</form>

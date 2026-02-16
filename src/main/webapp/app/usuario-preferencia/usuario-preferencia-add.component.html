@@ -1,0 +1,13 @@
+<div class="d-flex flex-wrap mb-4">
+    <h1 class="flex-grow-1" i18n="@@usuarioPreferencia.add.headline">Add Usuario Preferencia</h1>
+    <div>
+        <a routerLink="/usuarioPreferencias" class="btn btn-secondary" i18n="@@usuarioPreferencia.add.back">Back to list</a>
+    </div>
+</div>
+<form [formGroup]="addForm" (ngSubmit)="handleSubmit()">
+    <app-input-row [group]="addForm" field="userId" rowType="number" i18n-label="@@usuarioPreferencia.userId.label" label="User Id" />
+    <app-input-row [group]="addForm" field="rol" rowType="radio" [options]="{'DESARROLLO': 'DESARROLLO', 'DISENO': 'DISENO', 'GESTION': 'GESTION'}" i18n-label="@@usuarioPreferencia.rol.label" label="Rol" />
+    <app-input-row [group]="addForm" field="nivelInteres" rowType="number" i18n-label="@@usuarioPreferencia.nivelInteres.label" label="Nivel Interes" />
+    <app-input-row [group]="addForm" field="usuario" rowType="select" [options]="usuarioValues" i18n-label="@@usuarioPreferencia.usuario.label" label="Usuario" />
+    <input type="submit" i18n-value="@@usuarioPreferencia.add.headline" value="Add Usuario Preferencia" class="btn btn-primary mt-4" />
+</form>

@@ -1,0 +1,14 @@
+<div class="d-flex flex-wrap mb-4">
+    <h1 class="flex-grow-1" i18n="@@candidatura.edit.headline">Edit Candidatura</h1>
+    <div>
+        <a routerLink="/candidaturas" class="btn btn-secondary" i18n="@@candidatura.edit.back">Back to list</a>
+    </div>
+</div>
+<form [formGroup]="editForm" (ngSubmit)="handleSubmit()">
+    <app-input-row [group]="editForm" field="id" rowType="number" i18n-label="@@candidatura.id.label" label="Id" />
+    <app-input-row [group]="editForm" field="fecha" rowType="datetimepicker" i18n-label="@@candidatura.fecha.label" label="Fecha" />
+    <app-input-row [group]="editForm" field="estado" rowType="radio" [options]="{'PENDIENTE': 'PENDIENTE', 'ACEPTADA': 'ACEPTADA', 'RECHAZADA': 'RECHAZADA'}" i18n-label="@@candidatura.estado.label" label="Estado" />
+    <app-input-row [group]="editForm" field="usuario" rowType="select" [options]="usuarioValues" i18n-label="@@candidatura.usuario.label" label="Usuario" />
+    <app-input-row [group]="editForm" field="proyecto" rowType="select" [options]="proyectoValues" i18n-label="@@candidatura.proyecto.label" label="Proyecto" />
+    <input type="submit" i18n-value="@@candidatura.edit.headline" value="Edit Candidatura" class="btn btn-primary mt-4" />
+</form>

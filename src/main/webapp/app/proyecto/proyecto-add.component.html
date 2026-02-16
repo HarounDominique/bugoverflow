@@ -1,0 +1,16 @@
+<div class="d-flex flex-wrap mb-4">
+    <h1 class="flex-grow-1" i18n="@@proyecto.add.headline">Add Proyecto</h1>
+    <div>
+        <a routerLink="/proyectos" class="btn btn-secondary" i18n="@@proyecto.add.back">Back to list</a>
+    </div>
+</div>
+<form [formGroup]="addForm" (ngSubmit)="handleSubmit()">
+    <app-input-row [group]="addForm" field="titulo" i18n-label="@@proyecto.titulo.label" label="Titulo" />
+    <app-input-row [group]="addForm" field="descripcion" i18n-label="@@proyecto.descripcion.label" label="Descripcion" />
+    <app-input-row [group]="addForm" field="urlRepo" i18n-label="@@proyecto.urlRepo.label" label="Url Repo" />
+    <app-input-row [group]="addForm" field="categoria" i18n-label="@@proyecto.categoria.label" label="Categoria" />
+    <app-input-row [group]="addForm" field="estado" rowType="select" [options]="{'BORRADOR': 'BORRADOR', 'ACTIVO': 'ACTIVO', 'CERRADO': 'CERRADO', 'ARCHIVADO': 'ARCHIVADO'}" i18n-label="@@proyecto.estado.label" label="Estado" />
+    <app-input-row [group]="addForm" field="autor" rowType="select" [options]="autorValues" i18n-label="@@proyecto.autor.label" label="Autor" />
+    <app-input-row [group]="addForm" field="skills" rowType="multiselect" [options]="skillsValues" i18n-label="@@proyecto.skills.label" label="Skills" />
+    <input type="submit" i18n-value="@@proyecto.add.headline" value="Add Proyecto" class="btn btn-primary mt-4" />
+</form>

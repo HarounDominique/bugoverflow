@@ -1,0 +1,15 @@
+<div class="d-flex flex-wrap mb-4">
+    <h1 class="flex-grow-1" i18n="@@usuarioSkill.edit.headline">Edit Usuario Skill</h1>
+    <div>
+        <a routerLink="/usuarioSkills" class="btn btn-secondary" i18n="@@usuarioSkill.edit.back">Back to list</a>
+    </div>
+</div>
+<form [formGroup]="editForm" (ngSubmit)="handleSubmit()">
+    <app-input-row [group]="editForm" field="id" rowType="number" i18n-label="@@usuarioSkill.id.label" label="Id" />
+    <app-input-row [group]="editForm" field="userId" rowType="number" i18n-label="@@usuarioSkill.userId.label" label="User Id" />
+    <app-input-row [group]="editForm" field="skillId" rowType="number" i18n-label="@@usuarioSkill.skillId.label" label="Skill Id" />
+    <app-input-row [group]="editForm" field="nivelInteres" rowType="number" i18n-label="@@usuarioSkill.nivelInteres.label" label="Nivel Interes" />
+    <app-input-row [group]="editForm" field="usuario" rowType="select" [options]="usuarioValues" i18n-label="@@usuarioSkill.usuario.label" label="Usuario" />
+    <app-input-row [group]="editForm" field="skill" rowType="select" [options]="skillValues" i18n-label="@@usuarioSkill.skill.label" label="Skill" />
+    <input type="submit" i18n-value="@@usuarioSkill.edit.headline" value="Edit Usuario Skill" class="btn btn-primary mt-4" />
+</form>

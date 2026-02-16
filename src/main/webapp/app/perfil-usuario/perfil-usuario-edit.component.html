@@ -1,0 +1,17 @@
+<div class="d-flex flex-wrap mb-4">
+    <h1 class="flex-grow-1" i18n="@@perfilUsuario.edit.headline">Edit Perfil Usuario</h1>
+    <div>
+        <a routerLink="/perfilUsuarios" class="btn btn-secondary" i18n="@@perfilUsuario.edit.back">Back to list</a>
+    </div>
+</div>
+<form [formGroup]="editForm" (ngSubmit)="handleSubmit()">
+    <app-input-row [group]="editForm" field="id" rowType="number" i18n-label="@@perfilUsuario.id.label" label="Id" />
+    <app-input-row [group]="editForm" field="nombreVisible" i18n-label="@@perfilUsuario.nombreVisible.label" label="Nombre Visible" />
+    <app-input-row [group]="editForm" field="bio" i18n-label="@@perfilUsuario.bio.label" label="Bio" />
+    <app-input-row [group]="editForm" field="github" i18n-label="@@perfilUsuario.github.label" label="Github" />
+    <app-input-row [group]="editForm" field="webPersonal" i18n-label="@@perfilUsuario.webPersonal.label" label="Web Personal" />
+    <app-input-row [group]="editForm" field="avatarUrl" i18n-label="@@perfilUsuario.avatarUrl.label" label="Avatar Url" />
+    <app-input-row [group]="editForm" field="usuario" rowType="select" [options]="usuarioValues" i18n-label="@@perfilUsuario.usuario.label" label="Usuario" />
+    <app-input-row [group]="editForm" field="skills" rowType="multiselect" [options]="skillsValues" i18n-label="@@perfilUsuario.skills.label" label="Skills" />
+    <input type="submit" i18n-value="@@perfilUsuario.edit.headline" value="Edit Perfil Usuario" class="btn btn-primary mt-4" />
+</form>

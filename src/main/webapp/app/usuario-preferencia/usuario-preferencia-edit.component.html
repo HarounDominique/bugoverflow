@@ -1,0 +1,14 @@
+<div class="d-flex flex-wrap mb-4">
+    <h1 class="flex-grow-1" i18n="@@usuarioPreferencia.edit.headline">Edit Usuario Preferencia</h1>
+    <div>
+        <a routerLink="/usuarioPreferencias" class="btn btn-secondary" i18n="@@usuarioPreferencia.edit.back">Back to list</a>
+    </div>
+</div>
+<form [formGroup]="editForm" (ngSubmit)="handleSubmit()">
+    <app-input-row [group]="editForm" field="id" rowType="number" i18n-label="@@usuarioPreferencia.id.label" label="Id" />
+    <app-input-row [group]="editForm" field="userId" rowType="number" i18n-label="@@usuarioPreferencia.userId.label" label="User Id" />
+    <app-input-row [group]="editForm" field="rol" rowType="radio" [options]="{'DESARROLLO': 'DESARROLLO', 'DISENO': 'DISENO', 'GESTION': 'GESTION'}" i18n-label="@@usuarioPreferencia.rol.label" label="Rol" />
+    <app-input-row [group]="editForm" field="nivelInteres" rowType="number" i18n-label="@@usuarioPreferencia.nivelInteres.label" label="Nivel Interes" />
+    <app-input-row [group]="editForm" field="usuario" rowType="select" [options]="usuarioValues" i18n-label="@@usuarioPreferencia.usuario.label" label="Usuario" />
+    <input type="submit" i18n-value="@@usuarioPreferencia.edit.headline" value="Edit Usuario Preferencia" class="btn btn-primary mt-4" />
+</form>

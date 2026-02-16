@@ -1,0 +1,45 @@
+<div class="d-flex flex-wrap mb-4">
+    <h1 class="flex-grow-1" i18n="@@perfilUsuario.list.headline">Perfil Usuarios</h1>
+    <div>
+        <a routerLink="/perfilUsuarios/add" class="btn btn-primary ms-2" i18n="@@perfilUsuario.list.createNew">Create new Perfil Usuario</a>
+    </div>
+</div>
+@if (!perfilUsuarios || perfilUsuarios.length === 0) {
+<div i18n="@@perfilUsuario.list.empty">No Perfil Usuarios could be found.</div>
+} @else {
+<div class="table-responsive">
+    <table class="table table-striped table-hover align-middle">
+        <thead>
+            <tr>
+                <th scope="col" i18n="@@perfilUsuario.id.label">Id</th>
+                <th scope="col" i18n="@@perfilUsuario.nombreVisible.label">Nombre Visible</th>
+                <th scope="col" i18n="@@perfilUsuario.bio.label">Bio</th>
+                <th scope="col" i18n="@@perfilUsuario.github.label">Github</th>
+                <th scope="col" i18n="@@perfilUsuario.webPersonal.label">Web Personal</th>
+                <th scope="col" i18n="@@perfilUsuario.avatarUrl.label">Avatar Url</th>
+                <th scope="col" i18n="@@perfilUsuario.usuario.label">Usuario</th>
+                <th><!-- --></th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (perfilUsuario of perfilUsuarios; track perfilUsuario.id) {
+            <tr>
+                <td>{{ perfilUsuario.id }}</td>
+                <td>{{ perfilUsuario.nombreVisible }}</td>
+                <td>{{ perfilUsuario.bio }}</td>
+                <td>{{ perfilUsuario.github }}</td>
+                <td>{{ perfilUsuario.webPersonal }}</td>
+                <td>{{ perfilUsuario.avatarUrl }}</td>
+                <td>{{ perfilUsuario.usuario }}</td>
+                <td>
+                    <div class="float-end text-nowrap">
+                        <a [routerLink]="['/perfilUsuarios/edit', perfilUsuario.id]" class="btn btn-sm btn-secondary" i18n="@@perfilUsuario.list.edit">Edit</a>
+                        <button type="button" (click)="confirmDelete(perfilUsuario.id!)" class="btn btn-sm btn-secondary" i18n="@@perfilUsuario.list.delete">Delete</button>
+                    </div>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+}
